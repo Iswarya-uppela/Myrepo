@@ -35,6 +35,6 @@ jobs:
     - name: push nginx image
 
       run: |
-        
+        docker build -t ${{ secrets.AZURE_REGISTRY_URL }}/nginx:v1 .
         docker push ${{ secrets.AZURE_REGISTRY_URL }}/nginx:v1
  
