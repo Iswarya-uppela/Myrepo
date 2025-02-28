@@ -22,11 +22,18 @@ jobs:
  
     - name: Build and push Docker image
       run: |
-        IMAGE_NAME=${{ secrets.AZURE_REGISTRY_URL }}/nginx:v1
+        IMAGE_NAME=${{ secrets.AZURE_REGISTRY_URL }}/myrepo
         IMAGE_TAG=latest
  
         echo "Building Docker image..."
-        docker build -t $IMAGE_NAME:$IMAGE_TAG -f nginx.dockerfile .
+        # Ensure Dockerfile exists
+        if [ ! -f nginx.dockerfile ]; then
+          echo "Error: nginx.dockerfile not found!"
+          exit 1
+        fi
+ 
+        # Run the build command correctly
+        docker build -t $IMAGE_NAME:$IMAGE_TAG -f ./nginx.dockerfile .
  
         echo "Pushing Docker image to ACR..."
         docker push $IMAGE_NAME:$IMAGE_TAG
