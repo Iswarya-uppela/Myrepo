@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - main  # This triggers the pipeline on push to the main branch
 
 jobs:
   build:
@@ -27,3 +27,19 @@ jobs:
     - name: Push Docker image
       run: |
         docker push ${{ secrets.AZURE_REGISTRY_URL }}/nginx:v1
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Flux CLI
+      uses: fluxcd/flux2-action@v2
+      with:
+        version: 'latest'
+
+    - name: Apply Flux Kustomization
+      run: |
+        flux reconcile kustomization my-app --namespace=default
