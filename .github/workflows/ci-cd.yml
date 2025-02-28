@@ -22,7 +22,7 @@ jobs:
  
     - name: Build and push Docker image
       run: |
-        IMAGE_NAME=${{ secrets.AZURE_REGISTRY_URL }}/myrepo
+        IMAGE_NAME=${{ secrets.AZURE_REGISTRY_URL }}/nginx
         IMAGE_TAG=latest
  
         echo "Building Docker image..."
