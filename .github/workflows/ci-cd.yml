@@ -22,7 +22,7 @@ jobs:
  
     - name: Build and push Docker image
       run: |
-        IMAGE_NAME=containernginx.azurecr.io/newnginx
+        IMAGE_NAME=containernginx.azurecr.io/nginx
         IMAGE_TAG=latest
  
         echo "Building Docker image..."
