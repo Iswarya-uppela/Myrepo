@@ -49,7 +49,7 @@ jobs:
       run: docker logout acrdemooidc.azurecr.io
 
     # ---------------------- Update Manifest ----------------------
-    - name: Replace image in nginx.yml
+    - name: Replace image in nginx.yml(deployment.yml)
       run: |
         echo "Updating nginx.yml with image: $IMAGE_NAME:$IMAGE_TAG"
         sed -i "s|containernginx.azurecr.io/nginx:v1|$IMAGE_NAME:$IMAGE_TAG|g" nginx.yml
