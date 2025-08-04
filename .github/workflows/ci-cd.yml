@@ -52,8 +52,9 @@ jobs:
     - name: Replace image in nginx.yml(deployment.yml)
       run: |
         echo "Updating nginx.yml with image: $IMAGE_NAME:$IMAGE_TAG"
-        sed -i "s|acrdemooidc.azurecr.io/nginx:[^\"']*|$IMAGE_NAME:$IMAGE_TAG|g" nginx.yml
-
+        sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|g" nginx.yml
+    - name: Verify updated nginx.yml
+      run: cat nginx.yml
     # ---------------------- Deploy to AKS ----------------------
     - name: Set up kubectl
       uses: azure/setup-kubectl@v3
