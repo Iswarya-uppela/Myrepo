@@ -16,8 +16,6 @@ spec:
       - name: myapp
         image: acrdemooidc.azurecr.io/nginx:latest
         imagePullPolicy: IfNotPresent
-      imagePullSecrets:
-        - name: acr-secret
 ---
 apiVersion: v1
 kind: Service
