@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
+
 permissions:
-  id-token: write
+  id-token: write   # ✅ Required for OIDC
   contents: read
 
 jobs:
@@ -15,6 +16,15 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
+    # ---------------------- Azure Login with OIDC ----------------------
+    - name: Azure login (OIDC)
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        auth-type: ID_TOKEN  # ✅ Tells Azure to use GitHub OIDC token
 
     - name: Set image variables
       run: |
@@ -36,7 +46,7 @@ jobs:
         docker push $IMAGE_NAME:$IMAGE_TAG
 
     - name: Logout from Azure Container Registry
-      run: docker logout containernginx.azurecr.io
+      run: docker logout acrdemooidc.azurecr.io
 
     # ---------------------- Update Manifest ----------------------
     - name: Replace image in nginx.yml
@@ -45,13 +55,6 @@ jobs:
         sed -i "s|containernginx.azurecr.io/nginx:v1|$IMAGE_NAME:$IMAGE_TAG|g" nginx.yml
 
     # ---------------------- Deploy to AKS ----------------------
-    - name: Azure login
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
     - name: Set up kubectl
       uses: azure/setup-kubectl@v3
       with:
