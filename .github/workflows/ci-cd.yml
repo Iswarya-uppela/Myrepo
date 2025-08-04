@@ -15,14 +15,14 @@ jobs:
 
     - name: Set image variables
       run: |
-        echo "IMAGE_NAME=containernginx.azurecr.io/nginx" >> $GITHUB_ENV
+        echo "IMAGE_NAME=acrdemooidc.azurecr.io/nginx" >> $GITHUB_ENV
         echo "IMAGE_TAG=latest" >> $GITHUB_ENV
 
     # ---------------------- Build and Push Docker Image ----------------------
     - name: Log in to Azure Container Registry
       uses: azure/docker-login@v1
       with:
-        login-server: containernginx.azurecr.io
+        login-server: acrdemooidc.azurecr.io
         username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
         password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
 
@@ -55,7 +55,7 @@ jobs:
         version: 'latest'
 
     - name: Get AKS credentials
-      run: az aks get-credentials --resource-group YOUR_AKS_RESOURCE_GROUP --name YOUR_AKS_CLUSTER_NAME --overwrite-existing
+      run: az aks get-credentials --resource-group demorg --name akscluster --overwrite-existing
 
     - name: Deploy to AKS
       run: |
